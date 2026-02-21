@@ -1,0 +1,24 @@
+spring:
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL_EBOOK_SERVICE:jdbc:postgresql://localhost:5432/ebook-database}
+    username: ${SPRING_POSTGRES_USERNAME:root}
+    password: ${SPRING_POSTGRES_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  application:
+    name: ebook-translator
+
+
+
+
+
