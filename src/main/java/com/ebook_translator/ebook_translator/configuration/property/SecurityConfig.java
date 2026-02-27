@@ -22,7 +22,6 @@ public class SecurityConfig {
         httpSecurity
                 .authorizeHttpRequests((requests) ->
                         requests
-                                .requestMatchers("/translate/test").permitAll()
                                 .anyRequest().authenticated()
                 );
 
