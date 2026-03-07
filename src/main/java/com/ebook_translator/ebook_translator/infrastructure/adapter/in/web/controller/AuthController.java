@@ -1,8 +1,10 @@
 package com.ebook_translator.ebook_translator.infrastructure.adapter.in.web.controller;
 
+import com.ebook_translator.ebook_translator.application.port.in.SignUpUseCase;
 import com.ebook_translator.ebook_translator.application.service.SignUpService;
 import com.ebook_translator.ebook_translator.infrastructure.adapter.in.web.dto.request.SignUpRequest;
-import com.ebook_translator.ebook_translator.infrastructure.adapter.in.web.dto.response.SignUpResponse;
+import com.ebook_translator.ebook_translator.infrastructure.adapter.in.web.mapper.SignUpWebMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,17 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("auth")
 public class AuthController {
 
-    private final SignUpService signUpService;
+    private final SignUpUseCase signUpService;
+    private final SignUpWebMapper signUpWebMapper;
 
-    public AuthController(SignUpService signUpService) {
+    public AuthController(SignUpService signUpService, SignUpWebMapper signUpWebMapper) {
         this.signUpService = signUpService;
+        this.signUpWebMapper = signUpWebMapper;
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<SignUpResponse> signUp(
+    public ResponseEntity<?> signUp(
             @RequestBody SignUpRequest signUpRequest
     ) {
-        var response = signUpService.signUp(signUpRequest);
-        return ResponseEntity.ok(new SignUpResponse(""));
+        
+        signUpService.signUp(signUpWebMapper.toCommand(signUpRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

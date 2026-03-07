@@ -1,55 +1,23 @@
 package com.ebook_translator.ebook_translator.application.service;
 
-import com.ebook_translator.ebook_translator.configuration.property.KeycloakProperties;
-import com.ebook_translator.ebook_translator.infrastructure.adapter.in.web.dto.request.SignUpRequest;
-import com.ebook_translator.ebook_translator.infrastructure.adapter.in.web.dto.response.SignUpResponse;
-import jakarta.ws.rs.core.Response;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.representations.idm.CredentialRepresentation;
-import org.keycloak.representations.idm.UserRepresentation;
+import com.ebook_translator.ebook_translator.application.dto.SignUpCommand;
+import com.ebook_translator.ebook_translator.application.port.in.SignUpUseCase;
+import com.ebook_translator.ebook_translator.application.port.out.CreateIdentityPort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public class SignUpService {
+public class SignUpService implements SignUpUseCase {
 
-    private final Keycloak keycloak;
-    private final KeycloakProperties keycloakProperties;
+    private final CreateIdentityPort createIdentityPort;
 
-    public SignUpService(Keycloak keycloak, KeycloakProperties keycloakProperties) {
-        this.keycloak = keycloak;
-        this.keycloakProperties = keycloakProperties;
+    public SignUpService(CreateIdentityPort createIdentityPort) {
+        this.createIdentityPort = createIdentityPort;
     }
 
-    public SignUpResponse signUp(SignUpRequest request) {
+    @Override
+    public void signUp(SignUpCommand command) {
 
-        UserRepresentation user = new UserRepresentation();
-        user.setEnabled(true);
-        user.setUsername(request.login());
-        user.setEmail(request.login());
-        user.setEmailVerified(true);
+        createIdentityPort.createIdentity(command.login(), command.password());
 
-        CredentialRepresentation credential = new CredentialRepresentation();
-        credential.setTemporary(false);
-        credential.setType(CredentialRepresentation.PASSWORD);
-        credential.setValue(request.password());
-
-        user.setCredentials(List.of(credential));
-
-        Response response = keycloak.realm(keycloakProperties.getRealm())
-                .users()
-                .create(user);
-
-        if (response.getStatus() == 201) {
-
-            return new SignUpResponse("Inscription réussie");
-        }
-
-        if (response.getStatus() == 409) {
-            throw new RuntimeException("Utilisateur déjà existant");
-        }
-
-        throw new RuntimeException("Erreur lors de l'inscription");
     }
 }
