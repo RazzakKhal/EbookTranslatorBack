@@ -1,4 +1,4 @@
-package com.ebook_translator.ebook_translator.infrastructure.adapter.out.keycloak;
+package com.ebook_translator.ebook_translator.infrastructure.adapter.out.identity.keycloak;
 
 import com.ebook_translator.ebook_translator.application.port.out.CreateIdentityPort;
 import com.ebook_translator.ebook_translator.configuration.property.KeycloakProperties;
