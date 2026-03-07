@@ -1,7 +1,6 @@
 package com.ebook_translator.ebook_translator.infrastructure.adapter.in.web.controller;
 
 import com.ebook_translator.ebook_translator.application.port.in.SignUpUseCase;
-import com.ebook_translator.ebook_translator.application.service.SignUpService;
 import com.ebook_translator.ebook_translator.infrastructure.adapter.in.web.dto.request.SignUpRequest;
 import com.ebook_translator.ebook_translator.infrastructure.adapter.in.web.mapper.SignUpWebMapper;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,7 @@ public class AuthController {
     private final SignUpUseCase signUpService;
     private final SignUpWebMapper signUpWebMapper;
 
-    public AuthController(SignUpService signUpService, SignUpWebMapper signUpWebMapper) {
+    public AuthController(SignUpUseCase signUpService, SignUpWebMapper signUpWebMapper) {
         this.signUpService = signUpService;
         this.signUpWebMapper = signUpWebMapper;
     }
@@ -27,7 +26,7 @@ public class AuthController {
     public ResponseEntity<?> signUp(
             @RequestBody SignUpRequest signUpRequest
     ) {
-        
+
         signUpService.signUp(signUpWebMapper.toCommand(signUpRequest));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
