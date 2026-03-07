@@ -1,11 +1,14 @@
-package com.ebook_translator.ebook_translator.configuration.property;
+package com.ebook_translator.ebook_translator.configuration.bean;
 
-import com.ebook_translator.ebook_translator.configuration.bean.KeycloakRoleConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 public class SecurityConfig {
@@ -20,9 +23,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
 
         httpSecurity
+                .cors(cors -> corsConfigurationSource())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) ->
                         requests
-                                .requestMatchers("/translate/test").permitAll()
+                                .requestMatchers("/auth/sign-up").permitAll()
                                 .anyRequest().authenticated()
                 );
 
@@ -39,5 +44,20 @@ public class SecurityConfig {
         return jwtConverter;
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowCredentials(true);
+        configuration.addAllowedOriginPattern("*"); // toutes les origines
+        configuration.addAllowedHeader("*");        // tous les headers
+        configuration.addAllowedMethod("*");        // tous les verbes HTTP
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
+    }
 
 }
