@@ -1,5 +1,10 @@
 spring:
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
@@ -29,3 +34,5 @@ keycloak:
   realm: ${CLIENT_REALM:ebookTranslator}
   client-id: ${CLIENT_ID:apiSpring}
   client-secret: ${CLIENT_SECRET:eaegOkdy5VTaDlOoNNnJiXu8HE3zVowm}
+
+
