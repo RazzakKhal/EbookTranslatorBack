@@ -6,6 +6,7 @@ import com.ebook_translator.ebook_translator.application.port.out.CreateIdentity
 import com.ebook_translator.ebook_translator.application.service.SignUpService;
 import com.ebook_translator.ebook_translator.application.service.TranslateEbookService;
 import com.ebook_translator.ebook_translator.domain.service.EpubFormatValidator;
+import com.ebook_translator.ebook_translator.infrastructure.adapter.out.storage.EpubExtractionService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,8 +19,17 @@ public class ApplicationBeanConfig {
     }
 
     @Bean
-    public TranslateEbookUseCase translateEbookUseCase() {
-        var ebookValidator = new EpubFormatValidator();
-        return new TranslateEbookService(ebookValidator);
+    public TranslateEbookUseCase translateEbookUseCase(EpubExtractionService epubExtractionService, EpubFormatValidator epubFormatValidator) {
+        return new TranslateEbookService(epubFormatValidator, epubExtractionService);
+    }
+
+    @Bean
+    public EpubExtractionService epubExtractionService() {
+        return new EpubExtractionService();
+    }
+
+    @Bean
+    public EpubFormatValidator epubFormatValidator() {
+        return new EpubFormatValidator();
     }
 }

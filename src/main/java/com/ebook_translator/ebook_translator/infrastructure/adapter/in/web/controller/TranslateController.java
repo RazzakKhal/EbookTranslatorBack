@@ -37,6 +37,7 @@ public class TranslateController {
 
         this.translateEbookUseCase.translate(translateWebMapper.toCommand(ebook));
 
+
         byte[] fakeContent = "fichier traduit fictif".getBytes(StandardCharsets.UTF_8);
         Resource resource = new ByteArrayResource(fakeContent);
 
