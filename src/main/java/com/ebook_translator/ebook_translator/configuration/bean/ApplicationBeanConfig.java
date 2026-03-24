@@ -6,6 +6,7 @@ import com.ebook_translator.ebook_translator.application.port.out.CreateIdentity
 import com.ebook_translator.ebook_translator.application.service.SignUpService;
 import com.ebook_translator.ebook_translator.application.service.TranslateEbookService;
 import com.ebook_translator.ebook_translator.domain.service.EpubFormatValidator;
+import com.ebook_translator.ebook_translator.domain.service.HtmlParser;
 import com.ebook_translator.ebook_translator.domain.service.ReaderOrderResolver;
 import com.ebook_translator.ebook_translator.infrastructure.adapter.out.storage.EpubExtractionService;
 import com.ebook_translator.ebook_translator.infrastructure.adapter.out.storage.opf.ContentOpfParser;
@@ -27,8 +28,10 @@ public class ApplicationBeanConfig {
             EpubExtractionService epubExtractionService,
             EpubFormatValidator epubFormatValidator,
             ContentOpfParser contentOpfParser,
-            ReaderOrderResolver readerOrderResolver) {
-        return new TranslateEbookService(epubFormatValidator, epubExtractionService, contentOpfParser, readerOrderResolver);
+            ReaderOrderResolver readerOrderResolver,
+            HtmlParser htmlParser
+    ) {
+        return new TranslateEbookService(epubFormatValidator, epubExtractionService, contentOpfParser, readerOrderResolver, htmlParser);
     }
 
     @Bean
@@ -59,5 +62,10 @@ public class ApplicationBeanConfig {
     @Bean
     public ReaderOrderResolver readerOrderResolver() {
         return new ReaderOrderResolver();
+    }
+
+    @Bean
+    public HtmlParser htmlParser() {
+        return new HtmlParser();
     }
 }
