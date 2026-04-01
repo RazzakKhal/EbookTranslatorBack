@@ -3,12 +3,14 @@ package com.ebook_translator.ebook_translator.configuration.bean;
 import com.ebook_translator.ebook_translator.application.port.in.SignUpUseCase;
 import com.ebook_translator.ebook_translator.application.port.in.TranslateEbookUseCase;
 import com.ebook_translator.ebook_translator.application.port.out.CreateIdentityPort;
+import com.ebook_translator.ebook_translator.application.port.out.TranslateSegmentsPort;
 import com.ebook_translator.ebook_translator.application.service.SignUpService;
 import com.ebook_translator.ebook_translator.application.service.TranslateEbookService;
 import com.ebook_translator.ebook_translator.domain.service.EpubFormatValidator;
 import com.ebook_translator.ebook_translator.domain.service.HtmlParser;
 import com.ebook_translator.ebook_translator.domain.service.HtmlTranslationExtractorService;
 import com.ebook_translator.ebook_translator.domain.service.ReaderOrderResolver;
+import com.ebook_translator.ebook_translator.infrastructure.adapter.out.external.translation_api.client.LibreTranslateAdapter;
 import com.ebook_translator.ebook_translator.infrastructure.adapter.out.storage.EpubExtractionService;
 import com.ebook_translator.ebook_translator.infrastructure.adapter.out.storage.opf.ContentOpfParser;
 import com.ebook_translator.ebook_translator.infrastructure.adapter.out.storage.opf.mapper.ManifestXmlMapper;
@@ -31,7 +33,8 @@ public class ApplicationBeanConfig {
             ContentOpfParser contentOpfParser,
             ReaderOrderResolver readerOrderResolver,
             HtmlParser htmlParser,
-            HtmlTranslationExtractorService htmlTranslationExtractorService
+            HtmlTranslationExtractorService htmlTranslationExtractorService,
+            TranslateSegmentsPort translateSegmentsPort
     ) {
         return new TranslateEbookService(
                 epubFormatValidator,
@@ -39,7 +42,8 @@ public class ApplicationBeanConfig {
                 contentOpfParser,
                 readerOrderResolver,
                 htmlParser,
-                htmlTranslationExtractorService
+                htmlTranslationExtractorService,
+                translateSegmentsPort
         );
     }
 
@@ -81,5 +85,10 @@ public class ApplicationBeanConfig {
     @Bean
     public HtmlTranslationExtractorService htmlTranslationExtractorService() {
         return new HtmlTranslationExtractorService();
+    }
+
+    @Bean
+    public TranslateSegmentsPort translateSegmentsPort() {
+        return new LibreTranslateAdapter();
     }
 }

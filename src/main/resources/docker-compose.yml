@@ -48,6 +48,13 @@ services:
     ports:
       - "8081:8080"
 
+  libretranslate:
+    build: .
+    container_name: libretranslate
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
 volumes:
   ebook_pgdata:
   keycloak_pgdata:
